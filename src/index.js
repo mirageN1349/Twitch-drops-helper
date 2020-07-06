@@ -4,10 +4,22 @@ const form = document.forms['select']
 const inputLink = document.querySelector('.input-link')
 const inputTime = document.querySelector('.minute')
 const btnStop = document.querySelector('.button-stop')
+const counterMinute = document.querySelector('.counter-minute span')
+const counterRedirect = document.querySelector('.counter-redirect span')
+
 let arrLink = []
+let openedArr = []
+let countOpenWindow = 0
+let countMinutes = 0
+let stopOpen = true
 let validInput = /^[0-9]+$/
 
-form.addEventListener('submit', e => {
+//Events
+form.addEventListener('submit', checkForDrops)
+btnStop.addEventListener('click', btnStopClick)
+
+//events function
+function checkForDrops(e) {
   e.preventDefault()
   if (!inputLink.value || !inputTime.value) {
     confirm(`введите ссылки или время!`)
@@ -32,50 +44,60 @@ form.addEventListener('submit', e => {
     }
   })
 
-  if (!flag) return
+  if (!flag) {
+    arrLink = []
+    return
+  }
 
   const timeToRestart = inputTime.value
   btnStop.classList.add('active')
 
-  drops(timeToRestart, arrLink)
-})
+  dropsStart(timeToRestart, arrLink)
+}
 
-btnStop.addEventListener('click', () => {
+function btnStopClick() {
+  stopOpen = false
+  closeWindow()
   arrLink = []
   btnStop.classList.remove('active')
-})
+}
 
-let drops = timeToRestart => {
-  let openedArr = []
-  function openWindow(link) {
-    const data = window.open(link)
-    openedArr.push(data)
-  }
+// logic function
+function closeWindow() {
+  openedArr.forEach(openedWindow => {
+    openedWindow.close()
+  })
+}
 
-  function closeWindow() {
-    openedArr.forEach(openedWindow => {
-      openedWindow.close()
-    })
-  }
-
-  if (!openedArr.length) {
-    arrLink.forEach((link, index) => {
-      setTimeout(() => {
-        openWindow(link)
-      }, 3000 * index)
-    })
-  }
-
-  setInterval(() => {
-    arrLink.forEach((link, index) => {
-      setTimeout(() => {
-        openWindow(link)
-      }, 3000 * index)
-    })
+function openWindow() {
+  arrLink.forEach((link, index) => {
     setTimeout(() => {
-      arrLink.forEach(() => {
-        closeWindow()
-      })
+      if (!stopOpen) return
+      countOpenWindow++
+      openedArr.push(window.open(link))
+      counterRedirectPlus(countOpenWindow)
+    }, 3000 * index)
+  })
+}
+
+function counterRedirectPlus(index) {
+  counterRedirect.textContent = index
+}
+
+function countMinutesPlus(index) {
+  counterMinute.textContent = index
+}
+
+function dropsStart(timeToRestart) {
+  if (!openedArr.length) openWindow()
+  countMinutes += timeToRestart
+  countMinutesPlus(countMinutes)
+  setInterval(() => {
+    countOpenWindow === 3 ? closeWindow() : false
+    openWindow()
+
+    setTimeout(() => {
+      closeWindow()
     }, timeToRestart * 60000)
-  }, timeToRestart * 60000 + 3000)
+  }, timeToRestart * 60000 + 5000)
 }
