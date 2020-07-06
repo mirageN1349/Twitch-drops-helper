@@ -1,0 +1,68 @@
+body {
+  background: #333;
+  color: #000;
+  font-family: 'Montserrat';
+  overflow: hidden;
+}
+
+.container {
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  text-align: center;
+  align-items: center;
+  max-width: 1000px;
+  height: 100vh;
+  button {
+    transition: 0.3s;
+    max-width: 200px;
+    outline: none;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 10px;
+    &:hover {
+      background: #333;
+      color: #fff;
+    }
+  }
+}
+
+form {
+  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-direction: column;
+  width: 550px;
+  height: 550px;
+  box-shadow: 2px 5px 28px -4px rgba(217, 217, 217, 1);
+  background: #fff;
+  border-radius: 15px;
+  margin-bottom: 50px;
+  .title-link {
+    font-size: 17px;
+    font-weight: 500;
+  }
+  .minute {
+    height: 30px;
+  }
+  textarea {
+    width: 360px;
+    height: 120px;
+  }
+  div {
+    margin-bottom: 20px;
+  }
+}
+
+.active {
+  max-width: 5000px !important;
+  width: 100vw;
+  height: 100vh;
+  position: absolute;
+  top: 0;
+  font-size: 60px;
+  font-weight: 900;
+  color: #fff;
+}
