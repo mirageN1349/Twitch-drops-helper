@@ -11,6 +11,7 @@ let arrLink = []
 let openedArr = []
 let countOpenWindow = 0
 let countMinutes = 0
+let timeToRestart = 0
 let stopOpen = true
 let validInput = /^[0-9]+$/
 
@@ -49,9 +50,9 @@ function checkForDrops(e) {
     return
   }
 
-  const timeToRestart = inputTime.value
+  timeToRestart = inputTime.value
   btnStop.classList.add('active')
-
+  stopOpen = true
   dropsStart(timeToRestart, arrLink)
 }
 
@@ -75,7 +76,10 @@ function openWindow() {
       if (!stopOpen) return
       countOpenWindow++
       openedArr.push(window.open(link))
+
       counterRedirectPlus(countOpenWindow)
+      countMinutes += parseInt(timeToRestart)
+      countMinutesPlus(countMinutes)
     }, 3000 * index)
   })
 }
@@ -85,17 +89,15 @@ function counterRedirectPlus(index) {
 }
 
 function countMinutesPlus(index) {
-  counterMinute.textContent = index
+  counterMinute.textContent = index / arrLink.length
 }
 
 function dropsStart(timeToRestart) {
   if (!openedArr.length) openWindow()
-  countMinutes += timeToRestart
-  countMinutesPlus(countMinutes)
+
   setInterval(() => {
     countOpenWindow === 3 ? closeWindow() : false
     openWindow()
-
     setTimeout(() => {
       closeWindow()
     }, timeToRestart * 60000)
